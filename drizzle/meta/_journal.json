@@ -1,0 +1,41 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1708797854061,
+      "tag": "0000_perfect_revanche",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1708956033019,
+      "tag": "0001_colossal_titania",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1708956105183,
+      "tag": "0002_striped_owl",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1708956314054,
+      "tag": "0003_windy_micromax",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1708970274157,
+      "tag": "0004_blue_human_cannonball",
+      "breakpoints": true
+    }
+  ]
+}

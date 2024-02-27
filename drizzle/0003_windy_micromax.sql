@@ -1,0 +1,1 @@
+ALTER TABLE "exercise" ALTER COLUMN "workout_id" TYPE INT USING workout_id::integer;
