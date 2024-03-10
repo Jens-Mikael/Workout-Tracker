@@ -4,7 +4,7 @@ export default {
   schema: "./db/schema.ts",
   driver: "pg",
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL!,
+    connectionString: process.env.DEV_DATABASE_URL!,
   },
   out: "./drizzle",
 } satisfies Config;

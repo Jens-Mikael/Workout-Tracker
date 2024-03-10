@@ -4,9 +4,12 @@ import {
   text,
   primaryKey,
   integer,
+  boolean,
+  interval,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { randomUUID } from "crypto";
+import { relations } from "drizzle-orm";
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
@@ -66,7 +69,11 @@ export const workout = pgTable("workout", {
     .notNull()
     .references(() => users.id),
   type: text("type").notNull(),
-  created: timestamp("created", { mode: "string" }),
+  completed: boolean("completed")
+    .notNull()
+    .$default(() => false),
+  duration: integer("duration"),
+  created: timestamp("created", { mode: "date" }).$default(() => new Date()),
 });
 
 export const exercise = pgTable("exercise", {
@@ -75,7 +82,7 @@ export const exercise = pgTable("exercise", {
     .notNull()
     .references(() => workout.id),
   movement: text("movement").notNull(),
-  created: timestamp("created", { mode: "string" }),
+  created: timestamp("created", { mode: "date" }).$default(() => new Date()),
 });
 
 export const set = pgTable("set", {
@@ -88,5 +95,34 @@ export const set = pgTable("set", {
     .references(() => exercise.id),
   weight: integer("weight").notNull(),
   movement: text("movement").notNull(),
-  created: timestamp("created", { mode: "string" }),
+  created: timestamp("created", { mode: "date" }).$default(() => new Date()),
 });
+
+//relations
+export const userRelations = relations(users, ({ many }) => ({
+  workout: many(workout),
+  set: many(set),
+}));
+
+export const workoutRelations = relations(workout, ({ one, many }) => ({
+  user: one(users, {
+    fields: [workout.user_id],
+    references: [users.id],
+  }),
+  exercise: many(exercise),
+}));
+
+export const exerciseRelations = relations(exercise, ({ one, many }) => ({
+  workout: one(workout, {
+    fields: [exercise.workout_id],
+    references: [workout.id],
+  }),
+  set: many(set),
+}));
+
+export const setRelations = relations(set, ({ one }) => ({
+  exercise: one(exercise, {
+    fields: [set.exercise_id],
+    references: [exercise.id],
+  }),
+}));
