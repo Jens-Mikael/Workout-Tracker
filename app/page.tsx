@@ -16,13 +16,14 @@ export default async function Home() {
     );
   else
     return (
-      <div className="min-h-screen flex flex-col gap-8 p-5">
+      <div className="flex min-h-screen flex-col gap-8 p-5">
         <div className="flex flex-col gap-2">
-          <div className="font-bold text-3xl">
+          <div className="text-3xl font-bold">
             Hi{" "}
             {session.user?.name?.slice(
               0,
-              session.user?.name.indexOf("-") || session.user?.name.indexOf(" ")
+              session.user?.name.indexOf("-") ||
+                session.user?.name.indexOf(" "),
             )}{" "}
             👋
           </div>
@@ -31,10 +32,10 @@ export default async function Home() {
         {/* MENU */}
         <div className="flex gap-7">
           {NavMap.map((i) => (
-            <div className="flex flex-col gap-2 text-xs font-bold items-center">
+            <div className="flex flex-col items-center gap-2 text-xs font-bold">
               <Link
                 href={i.href}
-                className="p-4 border rounded-2xl border-black/20 w-fit hover:bg-black/5 transition-colors"
+                className="w-fit rounded-2xl border border-black/20 p-4 transition-colors hover:bg-black/5"
               >
                 <Image
                   src={`/icons/${i.src}`}
@@ -49,13 +50,13 @@ export default async function Home() {
         </div>
         {/* PREVIOUS WORKOUT */}
         <div className=" flex flex-col gap-3">
-          <div className="font-semibold text-xl">Your Previous Workout:</div>
-          <div className="rounded-t-2xl overflow-hidden ">
-            <div className="flex justify-between bg-stone-900 text-white text-xl p-3">
+          <div className="text-xl font-semibold">Your Previous Workout:</div>
+          <div className="overflow-hidden rounded-t-2xl ">
+            <div className="flex justify-between bg-stone-900 p-3 text-xl text-white">
               <div>Pull Day</div>
               <div>10/8/2023</div>
             </div>
-            <div className="border-black/20 border border-t-0 rounded-b-2xl p-5 flex flex-col gap-2">
+            <div className="flex flex-col gap-2 rounded-b-2xl border border-t-0 border-black/20 p-5">
               <div className="flex justify-between">
                 <div>Face Pulls</div>
                 <div>4x8-12</div>

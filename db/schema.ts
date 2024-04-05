@@ -9,7 +9,7 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { randomUUID } from "crypto";
-import { relations } from "drizzle-orm";
+import { InferSelectModel, relations } from "drizzle-orm";
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
@@ -40,7 +40,7 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
+  }),
 );
 
 export const sessions = pgTable("session", {
@@ -60,7 +60,7 @@ export const verificationTokens = pgTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
 
 export const workout = pgTable("workout", {
@@ -81,7 +81,7 @@ export const exercise = pgTable("exercise", {
   workout_id: text("workout_id")
     .notNull()
     .references(() => workout.id),
-  movement: text("movement").notNull(),
+  movement: text("movement"),
   created: timestamp("created", { mode: "date" }).$default(() => new Date()),
 });
 
@@ -125,4 +125,10 @@ export const setRelations = relations(set, ({ one }) => ({
     fields: [set.exercise_id],
     references: [exercise.id],
   }),
+  user: one(users, {
+    fields: [set.user_id],
+    references: [users.id],
+  }),
 }));
+
+//export type TExercise = InferSelectModel<typeof exercise>;

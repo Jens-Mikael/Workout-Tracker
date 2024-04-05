@@ -18,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${nunito.className} font-nunito`}>{children}</body>
+      <body className={`${nunito.className} font-nunito`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

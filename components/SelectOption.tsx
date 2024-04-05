@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 
 import {
@@ -10,15 +11,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { exercisesByType, workoutTypes } from "@/selectData";
+import { Control, ControllerRenderProps, FieldValues } from "react-hook-form";
+import { getCurrentWorkout } from "@/lib/read";
+import { useGetCurrentWorkout } from "@/lib/hooks";
 
 interface ISelectOption {
   selectType: "workout" | "movement";
   workoutType?: (typeof workoutTypes)[number];
+  field?: ControllerRenderProps<any, any>;
 }
 
-export function SelectOption({ selectType, workoutType }: ISelectOption) {
+function SelectOption({ selectType, workoutType, field }: ISelectOption) {
+  const { data } = useGetCurrentWorkout();
+  async function handleChange(value: string) {
+    console.log(data);
+    console.log(value);
+  }
   return (
-    <Select>
+    <Select
+      onValueChange={selectType === "movement" ? handleChange : field?.onChange}
+      defaultValue={selectType === "movement" ? "" : field?.value}
+    >
       <SelectTrigger className="w-fit min-w-[180px] gap-2">
         <SelectValue placeholder="Select" />
       </SelectTrigger>
@@ -30,6 +43,7 @@ export function SelectOption({ selectType, workoutType }: ISelectOption) {
                 <SelectItem
                   className={i === "Pull" ? "font-bold" : ""}
                   value={i}
+                  key={i}
                 >
                   {i} {i === "Pull" && "(Recommended)"}{" "}
                   {i === "Push" && "(Previous)"}

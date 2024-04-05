@@ -1,14 +1,22 @@
-import CreateSet from "./CreateSet";
+"use client";
+import { useGetCurrentWorkout } from "@/lib/hooks";
 import SelectOption from "./SelectOption";
-import Set from "./Set";
 import { Button } from "./ui/button";
-const CreateExercise = () => {
+import { exercise, set } from "@/db/schema";
+import { TExercise, TSet } from "@/types";
+import Set from "./Set";
+
+const CreateExercise = ({
+  currentExercise,
+}: {
+  currentExercise: TExercise;
+}) => {
   return (
-    <div className="rounded-t-2xl overflow-hidden bg-white">
-      <div className="flex justify-center bg-stone-900 text-white text-xl p-3">
+    <div className="overflow-hidden rounded-t-2xl bg-white">
+      <div className="flex justify-center bg-stone-900 p-3 text-xl text-white">
         <div>Exercise 1</div>
       </div>
-      <div className="border-black/20 border border-t-0 rounded-b-2xl p-5 flex flex-col gap-10">
+      <div className="flex flex-col gap-10 rounded-b-2xl border border-t-0 border-black/20 p-5">
         <div className="flex flex-col gap-2">
           <div className="font-medium">Exercise Type:</div>
           <SelectOption selectType="movement" workoutType="Pull" />
@@ -19,10 +27,7 @@ const CreateExercise = () => {
             <div className="flex-1">Weigth (kg)</div>
             <div className="flex-1">Reps</div>
           </div>
-          <CreateSet />
-          <CreateSet />
-          <CreateSet />
-          <CreateSet />
+          <Set />
           <Button variant="default">Add set</Button>
         </div>
       </div>
