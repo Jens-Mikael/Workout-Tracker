@@ -5,13 +5,13 @@ import MobileTap from "../MobileTap";
 import BeginWorkout from "../forms/beginWorkout";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { useAddExercise, useGetCurrentWorkout } from "@/lib/hooks";
+import { useGetCurrentWorkout } from "@/lib/hooks/get";
+import { useAddExercise } from "@/lib/hooks/mutate";
 
 const NewWorkout = () => {
   const { data } = useGetCurrentWorkout();
 
   const { mutateAsync: addExercise } = useAddExercise();
-  console.log(data?.exercise.length);
 
   return (
     <div className="flex min-h-screen flex-col gap-7 p-5">

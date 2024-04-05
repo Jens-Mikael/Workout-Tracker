@@ -1,19 +1,6 @@
-import {
-  Updater,
-  queryOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { getCurrentWorkout } from "./read";
-import { addExerciseAction } from "@/server/actions";
-
-export const workoutOptions = queryOptions({
-  queryKey: ["track-workout"],
-  queryFn: getCurrentWorkout,
-});
-
-export const useGetCurrentWorkout = () => useQuery(workoutOptions);
+import { addExerciseAction, setExerciseMovementAction } from "@/server/actions";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { workoutOptions } from ".";
 
 export const useAddExercise = () => {
   const queryClient = useQueryClient();
@@ -52,5 +39,17 @@ export const useAddExercise = () => {
   });
 };
 
-//https://tanstack.com/query/v4/docs/framework/react/guides/optimistic-updates
-//handle create workout and optimistic updates for it
+export const useSetExerciseMovement = () =>
+  useMutation({
+    mutationFn: ({
+      exerciseId,
+      movement,
+    }: {
+      exerciseId: string;
+      movement: string;
+    }) => setExerciseMovementAction(exerciseId, movement),
+    onError: (err: Error) => {
+      console.log(err);
+      return err;
+    },
+  });

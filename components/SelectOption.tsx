@@ -12,31 +12,39 @@ import {
 } from "@/components/ui/select";
 import { exercisesByType, workoutTypes } from "@/selectData";
 import { Control, ControllerRenderProps, FieldValues } from "react-hook-form";
-import { getCurrentWorkout } from "@/lib/read";
-import { useGetCurrentWorkout } from "@/lib/hooks";
+import { useSetExerciseMovement } from "@/lib/hooks/mutate";
 
 interface ISelectOption {
   selectType: "workout" | "movement";
   workoutType?: (typeof workoutTypes)[number];
   field?: ControllerRenderProps<any, any>;
+  exerciseId?: string;
+  defaultVal?: string;
 }
 
-function SelectOption({ selectType, workoutType, field }: ISelectOption) {
-  const { data } = useGetCurrentWorkout();
-  async function handleChange(value: string) {
-    console.log(data);
-    console.log(value);
+function SelectOption({
+  selectType,
+  workoutType,
+  field,
+  exerciseId,
+  defaultVal,
+}: ISelectOption) {
+  const { mutateAsync: setMovement } = useSetExerciseMovement();
+  async function handleChange(movement: string) {
+    if (!movement || !exerciseId) return;
+    await setMovement({ exerciseId, movement });
   }
+  console.log(defaultVal);
   return (
     <Select
       onValueChange={selectType === "movement" ? handleChange : field?.onChange}
-      defaultValue={selectType === "movement" ? "" : field?.value}
+      defaultValue={selectType === "movement" ? defaultVal : field?.value}
     >
       <SelectTrigger className="w-fit min-w-[180px] gap-2">
         <SelectValue placeholder="Select" />
       </SelectTrigger>
       <SelectContent>
-        <SelectGroup>
+        <SelectGroup key={exerciseId}>
           <SelectLabel>Workout</SelectLabel>
           {selectType === "workout"
             ? workoutTypes.map((i) => (

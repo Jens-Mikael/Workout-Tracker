@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { auth } from "./auth";
+import { auth } from "../lib/auth";
 import { and, eq } from "drizzle-orm";
 import { exercise, workout } from "@/db/schema";
 
@@ -22,4 +22,17 @@ export const addExercise = async (workoutId: string) => {
   const session = await auth();
   if (!session) throw new Error("No session");
   return db.insert(exercise).values({ workout_id: workoutId });
+};
+
+export const setExerciseMovement = async (
+  exerciseId: string,
+  movement: string,
+) => {
+  const session = await auth();
+  if (!session) throw new Error("No session");
+  
+  await db
+    .update(exercise)
+    .set({ movement })
+    .where(eq(exercise.id, exerciseId));
 };

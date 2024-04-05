@@ -1,5 +1,4 @@
 "use client";
-import { useGetCurrentWorkout } from "@/lib/hooks";
 import SelectOption from "./SelectOption";
 import { Button } from "./ui/button";
 import { exercise, set } from "@/db/schema";
@@ -18,8 +17,13 @@ const CreateExercise = ({
       </div>
       <div className="flex flex-col gap-10 rounded-b-2xl border border-t-0 border-black/20 p-5">
         <div className="flex flex-col gap-2">
-          <div className="font-medium">Exercise Type:</div>
-          <SelectOption selectType="movement" workoutType="Pull" />
+          <div className="font-medium">Movement:</div>
+          <SelectOption
+            selectType="movement"
+            workoutType="Pull"
+            exerciseId={currentExercise.id}
+            defaultVal={currentExercise.movement || undefined}
+          />
         </div>
         <div className="flex flex-col gap-5">
           <div className="flex items-stretch text-center">

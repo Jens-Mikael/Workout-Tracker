@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { auth } from "./auth";
+import { auth } from "../lib/auth";
 import { and, eq } from "drizzle-orm";
 import { workout } from "@/db/schema";
 
@@ -20,6 +20,5 @@ export const getCurrentWorkout = async () => {
       },
     },
   });
-  console.log(res);
   return res;
 };

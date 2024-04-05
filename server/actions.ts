@@ -1,6 +1,6 @@
 "use server";
 
-import { addExercise, beginWorkout } from "@/lib/write";
+import { addExercise, beginWorkout, setExerciseMovement } from "@/db/write";
 import { revalidatePath } from "next/cache";
 
 export async function beginWorkoutAction(workoutType: string) {
@@ -10,5 +10,18 @@ export async function beginWorkoutAction(workoutType: string) {
 
 export async function addExerciseAction(workoutId: string) {
   await addExercise(workoutId);
+  revalidatePath("/track-workout");
+}
+
+export async function setExerciseMovementAction(
+  workoutId: string,
+  movement: string,
+) {
+  try {
+    await setExerciseMovement(workoutId, movement);
+  } catch (error) {
+    console.log(error);
+  }
+  await setExerciseMovement(workoutId, movement);
   revalidatePath("/track-workout");
 }

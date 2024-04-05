@@ -1,4 +1,4 @@
-import { getCurrentWorkout } from "@/lib/read";
+import { getCurrentWorkout } from "@/db/read";
 import {
   HydrationBoundary,
   QueryClient,
