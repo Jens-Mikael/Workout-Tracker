@@ -4,7 +4,8 @@ export type TSet = {
   created: Date | null;
   movement: string;
   exercise_id: string;
-  weight: number;
+  weight: number | null;
+  reps: number | null;
 };
 
 export type TExercise = {

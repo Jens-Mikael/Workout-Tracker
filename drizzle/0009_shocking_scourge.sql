@@ -1,0 +1,1 @@
+ALTER TABLE "set" ALTER COLUMN "weight" DROP NOT NULL;

@@ -1,4 +1,4 @@
-import EditDrawer from "@/components/EditDrawer";
+import EditDrawer from "@/components/track-workout/EditDrawer";
 import Login from "@/components/Login";
 import Logout from "@/components/Logout";
 import MobileTap from "@/components/MobileTap";

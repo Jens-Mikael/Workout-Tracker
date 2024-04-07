@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import { nunito } from "./fonts";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="">
       <body className={`${nunito.className} font-nunito`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children} <Toaster />
+        </Providers>
       </body>
     </html>
   );

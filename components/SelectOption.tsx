@@ -11,12 +11,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { exercisesByType, workoutTypes } from "@/selectData";
-import { Control, ControllerRenderProps, FieldValues } from "react-hook-form";
+import { ControllerRenderProps } from "react-hook-form";
 import { useSetExerciseMovement } from "@/lib/hooks/mutate";
+import { useGetCurrentWorkout } from "@/lib/hooks/get";
 
 interface ISelectOption {
   selectType: "workout" | "movement";
-  workoutType?: (typeof workoutTypes)[number];
+  workoutType?: string;
   field?: ControllerRenderProps<any, any>;
   exerciseId?: string;
   defaultVal?: string;
@@ -30,11 +31,11 @@ function SelectOption({
   defaultVal,
 }: ISelectOption) {
   const { mutateAsync: setMovement } = useSetExerciseMovement();
+
   async function handleChange(movement: string) {
     if (!movement || !exerciseId) return;
     await setMovement({ exerciseId, movement });
   }
-  console.log(defaultVal);
   return (
     <Select
       onValueChange={selectType === "movement" ? handleChange : field?.onChange}
@@ -57,7 +58,7 @@ function SelectOption({
                   {i === "Push" && "(Previous)"}
                 </SelectItem>
               ))
-            : exercisesByType[workoutType!].map((i) => (
+            : exercisesByType[workoutType as string].map((i) => (
                 <SelectItem value={i}>{i}</SelectItem>
               ))}
         </SelectGroup>

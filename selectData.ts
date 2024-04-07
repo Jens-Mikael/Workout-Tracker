@@ -7,7 +7,7 @@ export const workoutTypes = [
   "Upperbody",
 ] as const;
 
-export const exercisesByType = {
+export const exercisesByType: { [key: string]: string[] } = {
   Push: [
     "Bench Press",
     "Push-Ups",

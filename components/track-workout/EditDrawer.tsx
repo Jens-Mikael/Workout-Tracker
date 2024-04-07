@@ -13,16 +13,22 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { useEditSet } from "@/lib/hooks/mutate";
 
-interface IEditDrawer {
-  setState: (state: number) => void;
+interface IProps {
+  setId: string;
+  defaultValue: number;
+  type: "reps" | "weight";
 }
 
-export function EditDrawer() {
-  const [count, setCounter] = React.useState(0);
+export function EditDrawer({ setId, defaultValue, type }: IProps) {
+  const [count, setCounter] = React.useState(defaultValue);
+  const [submitValue, setSubmitValue] = React.useState(defaultValue);
   const [isPressed, setIsPressed] = React.useState(false);
   const [intervalId, setIntervalId] = React.useState<NodeJS.Timeout>();
   const [isIncrement, setIsIncrement] = React.useState(false);
+
+  const { mutateAsync: editSet } = useEditSet();
 
   function onClick(adjustment: number) {
     setCounter((prev) => prev + adjustment);
@@ -32,7 +38,7 @@ export function EditDrawer() {
     if (isPressed) {
       const id = setInterval(() => {
         setCounter((prevCounter) =>
-          isIncrement ? prevCounter + 1 : prevCounter - 1
+          isIncrement ? prevCounter + 1 : prevCounter - 1,
         );
       }, 50);
       setIntervalId(id);
@@ -47,13 +53,21 @@ export function EditDrawer() {
     () => {
       setIsPressed(true);
     },
-    { onFinish: () => setIsPressed(false), onCancel: () => setIsPressed(false) }
+    {
+      onFinish: () => setIsPressed(false),
+      onCancel: () => setIsPressed(false),
+    },
   );
+
+  const handleSubmit = async () => {
+    setSubmitValue(count);
+    await editSet({ setId, type, amount: count });
+  };
 
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline">23</Button>
+        <Button variant="outline">{submitValue}</Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
@@ -103,7 +117,7 @@ export function EditDrawer() {
           </div>
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button>Submit</Button>
+              <Button onClick={handleSubmit}>Submit</Button>
             </DrawerClose>
             <DrawerClose asChild>
               <Button variant="outline">Cancel</Button>

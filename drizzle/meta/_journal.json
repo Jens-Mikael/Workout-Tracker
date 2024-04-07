@@ -64,6 +64,20 @@
       "when": 1711715650654,
       "tag": "0008_lame_retro_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1712326008164,
+      "tag": "0009_shocking_scourge",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1712415247209,
+      "tag": "0010_talented_shockwave",
+      "breakpoints": true
     }
   ]
 }

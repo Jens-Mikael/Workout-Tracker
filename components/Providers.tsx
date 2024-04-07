@@ -2,11 +2,12 @@
 import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { SessionProvider } from "next-auth/react";
 const Providers = ({ children }: { children: ReactNode }) => {
   const client = getQueryClient();
   return (
     <QueryClientProvider client={client}>
-      {children}
+      <SessionProvider>{children}</SessionProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>
   );
@@ -19,7 +20,6 @@ function makeQueryClient() {
     defaultOptions: {
       queries: {
         staleTime: Infinity,
-        
       },
     },
   });

@@ -93,7 +93,8 @@ export const set = pgTable("set", {
   exercise_id: text("exercise_id")
     .notNull()
     .references(() => exercise.id),
-  weight: integer("weight").notNull(),
+  weight: integer("weight"),
+  reps: integer("reps"),
   movement: text("movement").notNull(),
   created: timestamp("created", { mode: "date" }).$default(() => new Date()),
 });
@@ -131,4 +132,6 @@ export const setRelations = relations(set, ({ one }) => ({
   }),
 }));
 
-//export type TExercise = InferSelectModel<typeof exercise>;
+//_______________
+//TYPES
+//_______________

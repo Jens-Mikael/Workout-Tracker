@@ -1,6 +1,12 @@
 "use server";
 
-import { addExercise, beginWorkout, setExerciseMovement } from "@/db/write";
+import {
+  addExercise,
+  addSet,
+  beginWorkout,
+  editSet,
+  setExerciseMovement,
+} from "@/db/write";
 import { revalidatePath } from "next/cache";
 
 export async function beginWorkoutAction(workoutType: string) {
@@ -17,11 +23,20 @@ export async function setExerciseMovementAction(
   workoutId: string,
   movement: string,
 ) {
-  try {
-    await setExerciseMovement(workoutId, movement);
-  } catch (error) {
-    console.log(error);
-  }
   await setExerciseMovement(workoutId, movement);
+  revalidatePath("/track-workout");
+}
+
+export async function addSetAction(workoutId: string, movement: string) {
+  await addSet(workoutId, movement);
+  revalidatePath("/track-workout");
+}
+
+export async function editSetAction(
+  setId: string,
+  type: string,
+  amount: number,
+) {
+  await editSet(setId, type, amount);
   revalidatePath("/track-workout");
 }
