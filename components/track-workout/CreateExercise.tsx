@@ -1,28 +1,42 @@
 "use client";
 import SelectOption from "../SelectOption";
 import { Button } from "../ui/button";
-import { exercise, set } from "@/db/schema";
-import { TExercise, TSet } from "@/types";
+import { TExercise } from "@/types";
 import { useGetCurrentWorkout } from "@/lib/hooks/get";
 import CreateSet from "./CreateSet";
-import { useAddExercise, useAddSet } from "@/lib/hooks/mutate";
+import { useAddSet, useDeleteSet } from "@/lib/hooks/mutate";
 import { useToast } from "../ui/use-toast";
-import { auth } from "@/lib/auth";
-import { useSession } from "next-auth/react";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const CreateExercise = ({
   currentExercise,
+  handleDeleteExercise,
 }: {
   currentExercise: TExercise;
+  handleDeleteExercise: (exerciseId: string) => void;
 }) => {
   const { data } = useGetCurrentWorkout();
   const { mutateAsync: addSet } = useAddSet();
+  const { mutateAsync: deleteSet } = useDeleteSet();
   const { toast } = useToast();
+
+  const handleDeleteSet = (setId: string) => {
+    deleteSet({ setId, exerciseId: currentExercise.id });
+    toast({
+      description: "Set has been deleted",
+    });
+  };
 
   return (
     <div className="overflow-hidden rounded-t-2xl bg-white">
-      <div className="flex justify-center bg-stone-900 p-3 text-xl text-white">
+      <div className="relative flex items-center justify-center bg-stone-900 p-3 text-xl text-white">
         <div>Exercise 1</div>
+        <div
+          onClick={() => handleDeleteExercise(currentExercise.id)}
+          className="absolute right-2 cursor-pointer rounded-full p-2.5 transition-all hover:bg-white/10"
+        >
+          <FaRegTrashAlt size={16} />
+        </div>
       </div>
       <div className="flex flex-col gap-10 rounded-b-2xl border border-t-0 border-black/20 p-5">
         <div className="flex flex-col gap-2">
@@ -43,7 +57,12 @@ const CreateExercise = ({
             </div>
           )}
           {currentExercise.set.map((set, i) => (
-            <CreateSet set={set} key={set.id} index={i + 1} />
+            <CreateSet
+              handleDeleteSet={handleDeleteSet}
+              set={set}
+              key={set.id}
+              index={i}
+            />
           ))}
           <Button
             onClick={() => {

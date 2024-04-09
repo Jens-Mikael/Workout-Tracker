@@ -6,10 +6,13 @@ import BeginWorkout from "../forms/beginWorkout";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { useGetCurrentWorkout } from "@/lib/hooks/get";
-import { useAddExercise } from "@/lib/hooks/mutate";
+import { useAddExercise, useDeleteExercise } from "@/lib/hooks/mutate";
 import { useEffect } from "react";
+import Timer from "../Timer";
+import { useToast } from "../ui/use-toast";
 
 const NewWorkout = () => {
+  const { toast } = useToast();
   const { data } = useGetCurrentWorkout();
 
   const { mutateAsync: addExercise, isPending } = useAddExercise();
@@ -17,6 +20,13 @@ const NewWorkout = () => {
     if (isPending)
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   }, [isPending]);
+  const { mutateAsync: deleteExercise } = useDeleteExercise();
+  const handleDeleteExercise = (exerciseId: string) => {
+    deleteExercise(exerciseId);
+    toast({
+      description: "Set has been deleted",
+    });
+  };
 
   return (
     <div className="flex min-h-screen flex-col gap-7 p-5">
@@ -27,6 +37,8 @@ const NewWorkout = () => {
         <IoArrowBackOutline size={24} />
       </Link>
       <div className="flex w-full flex-col items-center justify-center gap-7">
+        {data?.created && <Timer />}
+
         <div className="w-full max-w-xl text-3xl font-semibold">
           Track New Workout 🏋️‍♂️
         </div>
@@ -34,7 +46,10 @@ const NewWorkout = () => {
           <div className="flex w-full max-w-xl flex-col gap-7">
             {data.exercise.length > 0 &&
               data.exercise.map((exercise) => (
-                <CreateExercise currentExercise={exercise} />
+                <CreateExercise
+                  currentExercise={exercise}
+                  handleDeleteExercise={handleDeleteExercise}
+                />
               ))}
             {/* ADD EXERCISE */}
             <MobileTap

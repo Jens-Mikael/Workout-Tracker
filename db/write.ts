@@ -54,3 +54,18 @@ export const editSet = async (setId: string, type: string, amount: number) => {
     .set({ [type]: amount })
     .where(eq(set.id, setId));
 };
+
+export const deleteSet = async (setId: string) => {
+  const session = await auth();
+  if (!session) throw new Error("No session");
+  return db.delete(set).where(eq(set.id, setId));
+};
+
+export const deleteExercise = async (exerciseId: string) => {
+  const session = await auth();
+  if (!session) throw new Error("No session");
+  await db.batch([
+    db.delete(exercise).where(eq(exercise.id, exerciseId)),
+    db.delete(set).where(eq(set.exercise_id, exerciseId)),
+  ]);
+};

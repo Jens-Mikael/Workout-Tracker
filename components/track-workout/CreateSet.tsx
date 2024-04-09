@@ -3,15 +3,19 @@ import { LegacyRef, useRef } from "react";
 import { Input } from "../ui/input";
 import EditDrawer from "./EditDrawer";
 import { TSet } from "@/types";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { useDeleteSet } from "@/lib/hooks/mutate";
 
-const CreateSet = ({ set, index }: { set: TSet; index: number }) => {
-  const ref = useRef<HTMLFormElement>(null);
-  const action = async (data: FormData) => {
-    console.log(data.set("weight", "1033"));
-  };
+interface IProps {
+  set: TSet;
+  index: number;
+  handleDeleteSet: (setId: string) => void;
+}
+
+const CreateSet = ({ set, index, handleDeleteSet }: IProps) => {
   return (
-    <form action={action} ref={ref} className="flex text-lg">
-      <div className="flex flex-1 items-center justify-center">{index}</div>
+    <div className="relative flex items-center text-lg ">
+      <div className="flex flex-1 items-center justify-center">{index + 1}</div>
       <div className="flex flex-1 items-center justify-center">
         <EditDrawer
           setId={set.id}
@@ -22,7 +26,13 @@ const CreateSet = ({ set, index }: { set: TSet; index: number }) => {
       <div className="flex flex-1 items-center justify-center">
         <EditDrawer setId={set.id} defaultValue={set.reps || 0} type="reps" />
       </div>
-    </form>
+      <div
+        onClick={() => handleDeleteSet(set.id)}
+        className="absolute right-2 h-fit cursor-pointer rounded-full p-2.5 transition-all hover:bg-black/5"
+      >
+        <FaRegTrashAlt size={16} />
+      </div>
+    </div>
   );
 };
 

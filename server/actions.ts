@@ -4,6 +4,8 @@ import {
   addExercise,
   addSet,
   beginWorkout,
+  deleteExercise,
+  deleteSet,
   editSet,
   setExerciseMovement,
 } from "@/db/write";
@@ -38,5 +40,15 @@ export async function editSetAction(
   amount: number,
 ) {
   await editSet(setId, type, amount);
+  revalidatePath("/track-workout");
+}
+
+export async function deleteSetAction(setId: string) {
+  await deleteSet(setId);
+  revalidatePath("/track-workout");
+}
+
+export async function deleteExerciseAction(exerciseId: string) {
+  await deleteExercise(exerciseId);
   revalidatePath("/track-workout");
 }
