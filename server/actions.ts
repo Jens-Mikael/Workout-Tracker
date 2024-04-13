@@ -7,6 +7,7 @@ import {
   deleteExercise,
   deleteSet,
   editSet,
+  finishTrackingWorkout,
   setExerciseMovement,
 } from "@/db/write";
 import { revalidatePath } from "next/cache";
@@ -50,5 +51,13 @@ export async function deleteSetAction(setId: string) {
 
 export async function deleteExerciseAction(exerciseId: string) {
   await deleteExercise(exerciseId);
-  revalidatePath("/track-workout");
+  return revalidatePath("/track-workout");
+}
+
+export async function finishTrackingWorkoutAction(
+  workoutId: string,
+  duration: number,
+) {
+  await finishTrackingWorkout(workoutId, duration);
+  return revalidatePath("/track-workout");
 }

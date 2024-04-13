@@ -1,9 +1,10 @@
 "use client";
-import { useGetCurrentWorkout } from "@/lib/hooks/get";
+import { useGetTrackWorkout } from "@/lib/hooks/get";
+import { durationAsString } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
 
 const Timer = () => {
-  const { data } = useGetCurrentWorkout();
+  const { data } = useGetTrackWorkout();
   const current = new Date().getTime() - data?.created!.getTime()!;
   const [duration, setDuration] = useState(Math.floor(current / 1000));
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
@@ -17,16 +18,7 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
-    // Calculate and set timer string whenever duration changes
-    let difference = Math.abs(duration); // difference in seconds
-    const hours = Math.floor(difference / 3600);
-    difference -= hours * 3600;
-    const minutes = Math.floor(difference / 60) % 60;
-    difference -= minutes * 60;
-    const seconds = Math.floor(difference % 60);
-    setTimerString(
-      `${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`,
-    );
+    setTimerString(durationAsString(duration));
   }, [duration]);
 
   return (

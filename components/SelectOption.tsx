@@ -13,7 +13,7 @@ import {
 import { exercisesByType, workoutTypes } from "@/selectData";
 import { ControllerRenderProps } from "react-hook-form";
 import { useSetExerciseMovement } from "@/lib/hooks/mutate";
-import { useGetCurrentWorkout } from "@/lib/hooks/get";
+import { useGetTrackWorkout } from "@/lib/hooks/get";
 
 interface ISelectOption {
   selectType: "workout" | "movement";

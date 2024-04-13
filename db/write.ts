@@ -2,20 +2,20 @@ import { db } from "@/db";
 import { auth } from "../lib/auth";
 import { and, eq } from "drizzle-orm";
 import { exercise, set, workout } from "@/db/schema";
+import { randomUUID } from "crypto";
 
 export const beginWorkout = async (workoutType: string) => {
   const session = await auth();
   if (!session) throw new Error("No session");
-  await db.transaction(async (tx) => {
-    const res = await tx
-      .insert(workout)
-      .values({
-        type: workoutType,
-        user_id: session.user!.id as string,
-      })
-      .returning({ workoutId: workout.id });
-    await tx.insert(exercise).values({ workout_id: res[0].workoutId });
-  });
+  const workoutId = randomUUID().toString();
+  return db.batch([
+    db.insert(workout).values({
+      type: workoutType,
+      user_id: session.user!.id as string,
+      id: workoutId,
+    }),
+    db.insert(exercise).values({ workout_id: workoutId }),
+  ]);
 };
 
 export const addExercise = async (workoutId: string) => {
@@ -64,8 +64,20 @@ export const deleteSet = async (setId: string) => {
 export const deleteExercise = async (exerciseId: string) => {
   const session = await auth();
   if (!session) throw new Error("No session");
-  await db.batch([
+  return db.batch([
     db.delete(exercise).where(eq(exercise.id, exerciseId)),
     db.delete(set).where(eq(set.exercise_id, exerciseId)),
   ]);
+};
+
+export const finishTrackingWorkout = async (
+  workoutId: string,
+  duration: number,
+) => {
+  const session = await auth();
+  if (!session) throw new Error("No session");
+  return db
+    .update(workout)
+    .set({ completed: true, duration })
+    .where(eq(workout.id, workoutId));
 };

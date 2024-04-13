@@ -6,6 +6,7 @@ import {
   integer,
   boolean,
   interval,
+  bigint,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { randomUUID } from "crypto";
@@ -73,6 +74,8 @@ export const workout = pgTable("workout", {
     .notNull()
     .$default(() => false),
   duration: integer("duration"),
+  rating: integer("rating"),
+  description: text("description"),
   created: timestamp("created", { mode: "date" }).$default(() => new Date()),
 });
 

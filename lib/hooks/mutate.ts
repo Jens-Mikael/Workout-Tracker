@@ -4,10 +4,11 @@ import {
   deleteExerciseAction,
   deleteSetAction,
   editSetAction,
+  finishTrackingWorkoutAction,
   setExerciseMovementAction,
 } from "@/server/actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { workoutOptions } from ".";
+import { trackWorkoutOptions } from ".";
 
 export const useAddExercise = () => {
   const queryClient = useQueryClient();
@@ -15,9 +16,9 @@ export const useAddExercise = () => {
   return useMutation({
     mutationFn: addExerciseAction,
     onMutate: async (workout_id: string) => {
-      await queryClient.cancelQueries({ queryKey: [workoutOptions.queryKey] });
-      const previousWorkout = queryClient.getQueryData(workoutOptions.queryKey);
-      queryClient.setQueryData(workoutOptions.queryKey, (prev) => {
+      await queryClient.cancelQueries({ queryKey: [trackWorkoutOptions.queryKey] });
+      const previousWorkout = queryClient.getQueryData(trackWorkoutOptions.queryKey);
+      queryClient.setQueryData(trackWorkoutOptions.queryKey, (prev) => {
         if (!prev) return prev;
         if (!prev.exercise || prev.exercise.length === 0) return prev;
         return {
@@ -78,9 +79,9 @@ export const useAddSet = () => {
       exerciseId: string;
       movement: string;
     }) => {
-      await queryClient.cancelQueries({ queryKey: [workoutOptions.queryKey] });
-      const previousWorkout = queryClient.getQueryData(workoutOptions.queryKey);
-      queryClient.setQueryData(workoutOptions.queryKey, (prev) => {
+      await queryClient.cancelQueries({ queryKey: [trackWorkoutOptions.queryKey] });
+      const previousWorkout = queryClient.getQueryData(trackWorkoutOptions.queryKey);
+      queryClient.setQueryData(trackWorkoutOptions.queryKey, (prev) => {
         if (!prev) return prev;
 
         const exerciseIndex = prev?.exercise.findIndex(
@@ -148,9 +149,9 @@ export const useDeleteSet = () => {
       setId: string;
       exerciseId: string;
     }) => {
-      await queryClient.cancelQueries({ queryKey: [workoutOptions.queryKey] });
-      const previousWorkout = queryClient.getQueryData(workoutOptions.queryKey);
-      queryClient.setQueryData(workoutOptions.queryKey, (prev) => {
+      await queryClient.cancelQueries({ queryKey: [trackWorkoutOptions.queryKey] });
+      const previousWorkout = queryClient.getQueryData(trackWorkoutOptions.queryKey);
+      queryClient.setQueryData(trackWorkoutOptions.queryKey, (prev) => {
         if (!prev) return prev;
 
         const exerciseIndex = prev?.exercise.findIndex(
@@ -181,9 +182,9 @@ export const useDeleteExercise = () => {
   return useMutation({
     mutationFn: deleteExerciseAction,
     onMutate: async (exerciseId: string) => {
-      await queryClient.cancelQueries({ queryKey: [workoutOptions.queryKey] });
-      const previousWorkout = queryClient.getQueryData(workoutOptions.queryKey);
-      queryClient.setQueryData(workoutOptions.queryKey, (prev) => {
+      await queryClient.cancelQueries({ queryKey: [trackWorkoutOptions.queryKey] });
+      const previousWorkout = queryClient.getQueryData(trackWorkoutOptions.queryKey);
+      queryClient.setQueryData(trackWorkoutOptions.queryKey, (prev) => {
         if (!prev) return prev;
 
         const exerciseIndex = prev?.exercise.findIndex(
@@ -198,6 +199,26 @@ export const useDeleteExercise = () => {
     onError: (err, newWorkout, context) => {
       queryClient.setQueryData(["track-workout"], context?.previousWorkout);
       console.log(err.message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["track-workout"] });
+    },
+  });
+};
+
+export const useFinishTrackWorkout = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      workoutId,
+      duration,
+    }: {
+      workoutId: string;
+      duration: number;
+    }) => finishTrackingWorkoutAction(workoutId, duration),
+    onError: (err: Error) => {
+      console.log(err);
+      return err;
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["track-workout"] });

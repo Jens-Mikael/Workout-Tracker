@@ -24,11 +24,11 @@ const FormSchema = z.object({
   }),
 });
 
-
 type FormValues = z.infer<typeof FormSchema>;
 
 interface IBeginWorkout {
   defaultVal?: string;
+  isPending?: boolean;
 }
 
 export default function BeginWorkout({ defaultVal }: IBeginWorkout) {
@@ -40,7 +40,8 @@ export default function BeginWorkout({ defaultVal }: IBeginWorkout) {
   });
 
   async function onSubmit(data: FormValues) {
-    beginWorkoutAction(data.workoutType);
+    await beginWorkoutAction(data.workoutType);
+    return;
   }
   return (
     <Form {...form}>
@@ -54,7 +55,7 @@ export default function BeginWorkout({ defaultVal }: IBeginWorkout) {
               <FormControl>
                 <SelectOption field={field} selectType="workout" />
               </FormControl>
-              <FormDescription>You can change this later </FormDescription>
+              <FormDescription>You cannot change this later </FormDescription>
               <FormMessage />
             </FormItem>
           )}

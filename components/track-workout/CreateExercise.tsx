@@ -2,7 +2,7 @@
 import SelectOption from "../SelectOption";
 import { Button } from "../ui/button";
 import { TExercise } from "@/types";
-import { useGetCurrentWorkout } from "@/lib/hooks/get";
+import { useGetTrackWorkout } from "@/lib/hooks/get";
 import CreateSet from "./CreateSet";
 import { useAddSet, useDeleteSet } from "@/lib/hooks/mutate";
 import { useToast } from "../ui/use-toast";
@@ -15,7 +15,7 @@ const CreateExercise = ({
   currentExercise: TExercise;
   handleDeleteExercise: (exerciseId: string) => void;
 }) => {
-  const { data } = useGetCurrentWorkout();
+  const { data } = useGetTrackWorkout();
   const { mutateAsync: addSet } = useAddSet();
   const { mutateAsync: deleteSet } = useDeleteSet();
   const { toast } = useToast();
