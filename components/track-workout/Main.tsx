@@ -55,6 +55,35 @@ const NewWorkout = () => {
       description: "Workout finished",
     });
   };
+  const handleAddExercise = async () => {
+    if (data!.exercise[data!.exercise.length - 1].set.length === 0)
+      return toast({
+        description: "Add a set before adding another exercise",
+        variant: "destructive",
+      });
+    for (
+      let i = 0;
+      i < data!.exercise[data!.exercise.length - 1].set.length;
+      i++
+    ) {
+      if (!data!.exercise[data!.exercise.length - 1].set[i].weight)
+        return toast({
+          description: "Fill in the weight before creating a new exercise",
+          variant: "destructive",
+        });
+      else if (!data!.exercise[data!.exercise.length - 1].set[i].reps)
+        return toast({
+          description: "Fill in the reps before creating a new exercise",
+          variant: "destructive",
+        });
+    }
+
+    addExercise(data?.id as string);
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+  };
   useEffect(() => {
     if (isAddExercisePending)
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
@@ -88,13 +117,7 @@ const NewWorkout = () => {
                 ))}
               {/* ADD EXERCISE */}
               <MobileTap
-                onClick={async () => {
-                  addExercise(data.id);
-                  window.scrollTo({
-                    top: document.body.scrollHeight,
-                    behavior: "smooth",
-                  });
-                }}
+                onClick={handleAddExercise}
                 className="rounded-2xl border border-black/20 py-10 text-xl transition-all hover:scale-105"
               >
                 Add Exercise

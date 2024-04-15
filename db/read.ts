@@ -7,7 +7,7 @@ export const getCurrentWorkout = async () => {
   const session = await auth();
   if (!session) throw new Error("No session");
   //get user active workout
-  const res = await db.query.workout.findFirst({
+  const activeWorkout = await db.query.workout.findFirst({
     where: and(
       eq(workout.user_id, session.user?.id as string),
       or(eq(workout.isCompleted, false), eq(workout.isReviewed, false)),
@@ -23,8 +23,9 @@ export const getCurrentWorkout = async () => {
       },
     },
   });
-  if (!res) return null;
-  return res;
+  if (!activeWorkout) return null;
+
+  return activeWorkout;
 };
 
 export const getWorkout = async (workoutId: string) => {

@@ -20,7 +20,6 @@ export const workoutOptions = (workoutId: string) =>
 export const previousWorkoutOptions = queryOptions({
   queryKey: ["previous-workout"],
   queryFn: () => {
-    console.log("usequery ran");
     return getPreviousWorkout();
   },
 });

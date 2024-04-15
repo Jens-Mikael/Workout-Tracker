@@ -62,3 +62,16 @@ export const editParams = (
   });
   return params.toString();
 };
+
+export const recommendedWorkout = (previous: string) => {
+  switch (previous) {
+    case "Push":
+      return "Pull";
+    case "Pull":
+      return "Legs";
+    case "Legs":
+      return "Push";
+    default:
+      return "Push";
+  }
+};

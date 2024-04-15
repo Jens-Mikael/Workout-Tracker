@@ -13,7 +13,8 @@ import {
 import { exercisesByType, workoutTypes } from "@/selectData";
 import { ControllerRenderProps } from "react-hook-form";
 import { useSetExerciseMovement } from "@/lib/hooks/mutate";
-import { useGetTrackWorkout } from "@/lib/hooks/get";
+import { useGetPreviousWorkout, useGetTrackWorkout } from "@/lib/hooks/get";
+import { recommendedWorkout } from "@/lib/utils";
 
 interface ISelectOption {
   selectType: "workout" | "movement";
@@ -31,6 +32,7 @@ function SelectOption({
   defaultVal,
 }: ISelectOption) {
   const { mutateAsync: setMovement } = useSetExerciseMovement();
+  const { data: previousWorkout } = useGetPreviousWorkout();
 
   async function handleChange(movement: string) {
     if (!movement || !exerciseId) return;
@@ -50,16 +52,24 @@ function SelectOption({
           {selectType === "workout"
             ? workoutTypes.map((i) => (
                 <SelectItem
-                  className={i === "Pull" ? "font-bold" : ""}
+                  className={
+                    i === recommendedWorkout(previousWorkout?.type as string)
+                      ? "font-bold"
+                      : ""
+                  }
                   value={i}
                   key={i}
                 >
-                  {i} {i === "Pull" && "(Recommended)"}{" "}
-                  {i === "Push" && "(Previous)"}
+                  {i}{" "}
+                  {i === recommendedWorkout(previousWorkout?.type as string) &&
+                    "(Recommended)"}{" "}
+                  {i === previousWorkout?.type && "(Previous)"}
                 </SelectItem>
               ))
             : exercisesByType[workoutType as string].map((i) => (
-                <SelectItem key={i} value={i}>{i}</SelectItem>
+                <SelectItem key={i} value={i}>
+                  {i}
+                </SelectItem>
               ))}
         </SelectGroup>
       </SelectContent>
