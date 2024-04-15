@@ -4,6 +4,7 @@ import {
   deleteExerciseAction,
   deleteSetAction,
   editSetAction,
+  finishReviewingWorkoutAction,
   finishTrackingWorkoutAction,
   setExerciseMovementAction,
 } from "@/server/actions";
@@ -16,8 +17,12 @@ export const useAddExercise = () => {
   return useMutation({
     mutationFn: addExerciseAction,
     onMutate: async (workout_id: string) => {
-      await queryClient.cancelQueries({ queryKey: [trackWorkoutOptions.queryKey] });
-      const previousWorkout = queryClient.getQueryData(trackWorkoutOptions.queryKey);
+      await queryClient.cancelQueries({
+        queryKey: [trackWorkoutOptions.queryKey],
+      });
+      const previousWorkout = queryClient.getQueryData(
+        trackWorkoutOptions.queryKey,
+      );
       queryClient.setQueryData(trackWorkoutOptions.queryKey, (prev) => {
         if (!prev) return prev;
         if (!prev.exercise || prev.exercise.length === 0) return prev;
@@ -79,8 +84,12 @@ export const useAddSet = () => {
       exerciseId: string;
       movement: string;
     }) => {
-      await queryClient.cancelQueries({ queryKey: [trackWorkoutOptions.queryKey] });
-      const previousWorkout = queryClient.getQueryData(trackWorkoutOptions.queryKey);
+      await queryClient.cancelQueries({
+        queryKey: [trackWorkoutOptions.queryKey],
+      });
+      const previousWorkout = queryClient.getQueryData(
+        trackWorkoutOptions.queryKey,
+      );
       queryClient.setQueryData(trackWorkoutOptions.queryKey, (prev) => {
         if (!prev) return prev;
 
@@ -149,8 +158,12 @@ export const useDeleteSet = () => {
       setId: string;
       exerciseId: string;
     }) => {
-      await queryClient.cancelQueries({ queryKey: [trackWorkoutOptions.queryKey] });
-      const previousWorkout = queryClient.getQueryData(trackWorkoutOptions.queryKey);
+      await queryClient.cancelQueries({
+        queryKey: [trackWorkoutOptions.queryKey],
+      });
+      const previousWorkout = queryClient.getQueryData(
+        trackWorkoutOptions.queryKey,
+      );
       queryClient.setQueryData(trackWorkoutOptions.queryKey, (prev) => {
         if (!prev) return prev;
 
@@ -182,8 +195,12 @@ export const useDeleteExercise = () => {
   return useMutation({
     mutationFn: deleteExerciseAction,
     onMutate: async (exerciseId: string) => {
-      await queryClient.cancelQueries({ queryKey: [trackWorkoutOptions.queryKey] });
-      const previousWorkout = queryClient.getQueryData(trackWorkoutOptions.queryKey);
+      await queryClient.cancelQueries({
+        queryKey: [trackWorkoutOptions.queryKey],
+      });
+      const previousWorkout = queryClient.getQueryData(
+        trackWorkoutOptions.queryKey,
+      );
       queryClient.setQueryData(trackWorkoutOptions.queryKey, (prev) => {
         if (!prev) return prev;
 
@@ -219,6 +236,26 @@ export const useFinishTrackWorkout = () => {
     onError: (err: Error) => {
       console.log(err);
       return err;
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["track-workout"] });
+    },
+  });
+};
+
+export const useFinishReviewingWorkout = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      workoutId,
+      data,
+    }: {
+      workoutId: string;
+      data: { description?: string; rating: number };
+    }) => finishReviewingWorkoutAction(workoutId, data),
+    onError: (err: Error) => {
+      console.log(err.message);
+      return err.message;
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["track-workout"] });

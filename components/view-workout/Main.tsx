@@ -8,10 +8,12 @@ import { durationAsString, getWeekDay } from "@/lib/utils";
 import { IoIosStar } from "react-icons/io";
 import { IoIosStarHalf } from "react-icons/io";
 import { IoIosStarOutline } from "react-icons/io";
+import StarRating from "../StarRating";
 
 const ViewWorkout = () => {
   const params = useParams();
   const { data } = useGetWorkout(params.workoutId as string);
+
   if (!data) return;
   return (
     <div className="flex min-h-screen flex-col gap-7 p-5 ">
@@ -43,13 +45,7 @@ const ViewWorkout = () => {
               </div>
               <div className="flex justify-between">
                 <div>Your rating:</div>
-                <div className="flex">
-                  <IoIosStar size={34} className="fill-orange-300" />
-                  <IoIosStar size={34} className="fill-orange-300" />
-                  <IoIosStar size={34} className="fill-orange-300" />
-                  <IoIosStarHalf size={34} className="fill-orange-300" />
-                  <IoIosStarOutline size={34} className="fill-orange-300" />
-                </div>
+                <StarRating rating={data.rating!} size={32} />
               </div>
             </div>
             <div className="font-light italic">

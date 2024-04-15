@@ -1,4 +1,9 @@
-import { getCurrentWorkout, getPreviousWorkout, getWorkout } from "@/db/read";
+import {
+  getAllPreviousWorkouts,
+  getCurrentWorkout,
+  getPreviousWorkout,
+  getWorkout,
+} from "@/db/read";
 import { queryOptions } from "@tanstack/react-query";
 
 export const trackWorkoutOptions = queryOptions({
@@ -14,5 +19,13 @@ export const workoutOptions = (workoutId: string) =>
 
 export const previousWorkoutOptions = queryOptions({
   queryKey: ["previous-workout"],
-  queryFn: getPreviousWorkout,
+  queryFn: () => {
+    console.log("usequery ran");
+    return getPreviousWorkout();
+  },
+});
+
+export const allPreviousWorkoutsOptions = queryOptions({
+  queryKey: ["all-previous-workouts"],
+  queryFn: getAllPreviousWorkouts,
 });

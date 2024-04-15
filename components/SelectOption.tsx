@@ -59,7 +59,7 @@ function SelectOption({
                 </SelectItem>
               ))
             : exercisesByType[workoutType as string].map((i) => (
-                <SelectItem value={i}>{i}</SelectItem>
+                <SelectItem key={i} value={i}>{i}</SelectItem>
               ))}
         </SelectGroup>
       </SelectContent>

@@ -16,8 +16,12 @@ import {
 import { useEffect } from "react";
 import Timer from "../Timer";
 import { useToast } from "../ui/use-toast";
+import { useRouter, useSearchParams } from "next/navigation";
+import ReviewWorkout from "../forms/ReviewWorkoutForm";
 
 const NewWorkout = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const { data } = useGetTrackWorkout();
   const { mutateAsync: addExercise, isPending: isAddExercisePending } =
@@ -48,7 +52,7 @@ const NewWorkout = () => {
       duration,
     });
     toast({
-      description: "Workout has been finished",
+      description: "Workout finished",
     });
   };
   useEffect(() => {
@@ -56,6 +60,7 @@ const NewWorkout = () => {
       window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   }, [isAddExercisePending]);
 
+  if (data?.isCompleted && !data.isReviewed) return <ReviewWorkout />;
   return (
     <div className="flex min-h-screen flex-col gap-7 p-5">
       <Link
@@ -76,6 +81,7 @@ const NewWorkout = () => {
               {data.exercise.length > 0 &&
                 data.exercise.map((exercise) => (
                   <CreateExercise
+                    key={exercise.id}
                     currentExercise={exercise}
                     handleDeleteExercise={handleDeleteExercise}
                   />

@@ -1,12 +1,8 @@
-import EditDrawer from "@/components/track-workout/EditDrawer";
 import Login from "@/components/Login";
-import Logout from "@/components/Logout";
-import MobileTap from "@/components/MobileTap";
 import { auth } from "@/lib/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { LuLayoutTemplate } from "react-icons/lu";
-import { Button } from "@/components/ui/button";
 import {
   HydrationBoundary,
   QueryClient,
@@ -14,11 +10,16 @@ import {
 } from "@tanstack/react-query";
 import { previousWorkoutOptions } from "@/lib/hooks";
 import PreviousWorkout from "@/components/PreviousWorkout";
+import { getPreviousWorkout } from "@/db/read";
 
 export default async function Home() {
   const session = await auth();
   const queryClient = new QueryClient();
-  if (session) await queryClient.prefetchQuery(previousWorkoutOptions);
+  if (session)
+    await queryClient.prefetchQuery({
+      queryKey: ["previous-workout"],
+      queryFn: getPreviousWorkout,
+    });
   if (!session)
     return (
       <div>
@@ -53,7 +54,7 @@ export default async function Home() {
               New Template
             </div>
             {NavMap.map((i) => (
-              <div className="flex flex-col items-center gap-2 text-xs font-bold ">
+              <div key={i.src} className="flex flex-col items-center gap-2 text-xs font-bold ">
                 <Link
                   href={i.href}
                   className="w-fit rounded-2xl border border-black/20 p-4 transition-colors hover:bg-black/5"

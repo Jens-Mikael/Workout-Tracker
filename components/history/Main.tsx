@@ -1,13 +1,24 @@
 "use client";
 import { Calendar } from "@/components/ui/calendar";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
 import WorkoutDialog from "./WorkoutDialog";
+import { useGetAllPreviousWorkouts } from "@/lib/hooks/get";
+import { isSameDate } from "@/lib/utils";
 
 const History = () => {
   const [open, setOpen] = useState(false);
-
+  const { data } = useGetAllPreviousWorkouts();
+  const [dates, setDates] = useState<Date[]>([]);
+  const [clickedWorkoutIndex, setClickedWorkoutIndex] = useState<number>(-1);
+  useMemo(() => {
+    const dates: Date[] = [];
+    data?.forEach((workout) => {
+      dates.push(workout.created!);
+    });
+    setDates(dates);
+  }, [data]);
   return (
     <div className="flex min-h-screen flex-col gap-7 p-5">
       <Link
@@ -21,13 +32,25 @@ const History = () => {
           <div className="w-full text-3xl font-semibold">Your History 🗓️</div>
           <Calendar
             className="w-full rounded-md border text-sm"
-            selected={[new Date(), new Date(2024, 3, 22)]}
-            onDayClick={(date) => setOpen(true)}
+            selected={dates}
+            onDayClick={(date) => {
+              const i = data?.findIndex((workout) =>
+                isSameDate(workout.created!, date),
+              );
+              if (i !== -1) {
+                setOpen(true);
+                setClickedWorkoutIndex(i!);
+              }
+            }}
             mode="multiple"
           />
         </div>
       </div>
-      <WorkoutDialog open={open} setOpen={setOpen} />
+      <WorkoutDialog
+        open={open}
+        setOpen={setOpen}
+        index={clickedWorkoutIndex}
+      />
     </div>
   );
 };

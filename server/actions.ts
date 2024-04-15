@@ -7,6 +7,7 @@ import {
   deleteExercise,
   deleteSet,
   editSet,
+  finishReviewingWorkout,
   finishTrackingWorkout,
   setExerciseMovement,
 } from "@/db/write";
@@ -59,5 +60,12 @@ export async function finishTrackingWorkoutAction(
   duration: number,
 ) {
   await finishTrackingWorkout(workoutId, duration);
+  return revalidatePath("/track-workout");
+}
+export async function finishReviewingWorkoutAction(
+  workoutId: string,
+  data: { description?: string; rating: number },
+) {
+  await finishReviewingWorkout(workoutId, data);
   return revalidatePath("/track-workout");
 }

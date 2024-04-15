@@ -70,7 +70,10 @@ export const workout = pgTable("workout", {
     .notNull()
     .references(() => users.id),
   type: text("type").notNull(),
-  completed: boolean("completed")
+  isCompleted: boolean("isCompleted")
+    .notNull()
+    .$default(() => false),
+  isReviewed: boolean("isReviewed")
     .notNull()
     .$default(() => false),
   duration: integer("duration"),

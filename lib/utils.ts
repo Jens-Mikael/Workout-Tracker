@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import { ReadonlyURLSearchParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -20,6 +21,8 @@ export const durationAsString = (duration: number) => {
 
 export const getWeekDay = (day: number) => {
   switch (day) {
+    case 0:
+      return "Sunday";
     case 1:
       return "Monday";
     case 2:
@@ -32,9 +35,30 @@ export const getWeekDay = (day: number) => {
       return "Friday";
     case 6:
       return "Saturday";
-    case 7:
-      return "Sunday";
     default:
       return "Unknown";
   }
+};
+
+export function isSameDate(date1: Date, date2: Date) {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+}
+
+export const editParams = (
+  queryObj: object,
+  URLParams: ReadonlyURLSearchParams,
+) => {
+  const params = new URLSearchParams(URLParams);
+  Object.keys(queryObj).forEach((key) => {
+    if (queryObj[key as keyof object] === "deleteParam") {
+      params.delete(key);
+    } else {
+      params.set(key, queryObj[key as keyof object]);
+    }
+  });
+  return params.toString();
 };

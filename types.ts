@@ -20,7 +20,10 @@ export type TWorkout = {
   id: string;
   type: string;
   user_id: string;
-  completed: boolean;
+  isCompleted: boolean;
+  isReviewed: boolean;
+  description: string | null;
+  rating: number | null;
   duration: number | null;
   created: Date | null;
   exercise: TExercise[];
