@@ -66,7 +66,16 @@ const NewWorkout = () => {
       i < data!.exercise[data!.exercise.length - 1].set.length;
       i++
     ) {
-      if (!data!.exercise[data!.exercise.length - 1].set[i].weight)
+      if (
+        !data!.exercise[data!.exercise.length - 1].set[i].weight &&
+        !data!.exercise[data!.exercise.length - 1].set[i].reps
+      )
+        return toast({
+          description:
+            "Fill in the weight and sets before creating a new exercise",
+          variant: "destructive",
+        });
+      else if (!data!.exercise[data!.exercise.length - 1].set[i].weight)
         return toast({
           description: "Fill in the weight before creating a new exercise",
           variant: "destructive",
@@ -94,7 +103,7 @@ const NewWorkout = () => {
     <div className="flex min-h-screen flex-col gap-7 p-5">
       <Link
         href="/"
-        className="w-fit rounded-full p-2 transition-all hover:bg-black/5"
+        className="w-fit rounded-full p-2 transition-all hover:bg-muted"
       >
         <IoArrowBackOutline size={24} />
       </Link>

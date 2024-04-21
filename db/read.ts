@@ -1,5 +1,5 @@
 import { auth } from "../lib/auth";
-import { and, asc, eq, or } from "drizzle-orm";
+import { and, asc, desc, eq, or } from "drizzle-orm";
 import { exercise, set, workout } from "@/db/schema";
 import { db } from ".";
 
@@ -58,6 +58,8 @@ export const getPreviousWorkout = async () => {
       eq(workout.user_id, session.user?.id as string),
       eq(workout.isCompleted, true),
     ),
+    orderBy: [desc(workout.created)],
+
     columns: {
       id: true,
       type: true,

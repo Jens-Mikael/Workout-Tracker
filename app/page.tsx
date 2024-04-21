@@ -11,6 +11,7 @@ import {
 import { previousWorkoutOptions } from "@/lib/hooks";
 import PreviousWorkout from "@/components/PreviousWorkout";
 import { getPreviousWorkout } from "@/db/read";
+import { Button } from "@/components/ui/button";
 
 export default async function Home() {
   const session = await auth();
@@ -28,7 +29,7 @@ export default async function Home() {
     );
   else
     return (
-      <div className="flex min-h-screen flex-col items-center p-5">
+      <div className="flex min-h-screen flex-col items-center sm:p-10 p-5">
         <div className="flex w-full max-w-3xl flex-col gap-8">
           <div className="flex flex-col gap-2">
             <div className="text-3xl font-bold">
@@ -43,26 +44,21 @@ export default async function Home() {
             <div className="font-semibold">What are we hitting today?</div>
           </div>
           {/* MENU */}
-          <div className="flex gap-7">
-            <div className="flex flex-col items-center gap-2 text-xs font-bold ">
-              <Link
-                href="plan"
-                className="w-fit rounded-2xl border border-black/20 p-4 transition-colors hover:bg-black/5"
-              >
-                <LuLayoutTemplate size={36} />
-              </Link>
-              New Template
-            </div>
+          <div className="flex gap-3 xs:gap-7 text-center justify-between xs:justify-start">
             {NavMap.map((i) => (
-              <div key={i.src} className="flex flex-col items-center gap-2 text-xs font-bold ">
+              <div
+                key={i.src}
+                className="flex flex-col items-center gap-2 text-xs font-bold "
+              >
                 <Link
                   href={i.href}
-                  className="w-fit rounded-2xl border border-black/20 p-4 transition-colors hover:bg-black/5"
+                  className="w-fit rounded-2xl border 2xs:w-min p-4 transition-colors hover:bg-muted"
                 >
                   <Image
                     src={`/icons/${i.src}`}
-                    height={36}
-                    width={36}
+                    height={40}
+                    width={40}
+                    className="2xs:h-10 2xs:w-10 h-8 w-8 2xs:min-h-10 2xs:min-w-10 min-h-8 min-w-8"
                     alt="ico"
                   />
                 </Link>
@@ -81,6 +77,11 @@ export default async function Home() {
 }
 
 const NavMap = [
+  {
+    text: "New Template",
+    href: "plan",
+    src: "addTemplate.svg",
+  },
   {
     text: "Track Workout",
     href: "track-workout",

@@ -259,6 +259,8 @@ export const useFinishReviewingWorkout = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["track-workout"] });
+      queryClient.invalidateQueries({ queryKey: ["previous-workout"] });
+      queryClient.invalidateQueries({ queryKey: ["all-track-workout"] });
     },
   });
 };

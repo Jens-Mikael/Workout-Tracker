@@ -100,8 +100,8 @@ export const deleteExercise = async (exerciseId: string) => {
     ]);
   } else if (isDevelopment) {
     return db.transaction(async (tx) => {
-      await tx.delete(exercise).where(eq(exercise.id, exerciseId));
       await tx.delete(set).where(eq(set.exercise_id, exerciseId));
+      await tx.delete(exercise).where(eq(exercise.id, exerciseId));
     });
   }
 };

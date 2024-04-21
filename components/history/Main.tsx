@@ -11,7 +11,7 @@ const History = () => {
   const [open, setOpen] = useState(false);
   const { data } = useGetAllPreviousWorkouts();
   const [dates, setDates] = useState<Date[]>([]);
-  const [clickedWorkoutIndex, setClickedWorkoutIndex] = useState<number>(-1);
+  const [clickedWorkoutIndex, setClickedWorkoutIndex] = useState<number[]>([]);
   useMemo(() => {
     const dates: Date[] = [];
     data?.forEach((workout) => {
@@ -23,7 +23,7 @@ const History = () => {
     <div className="flex min-h-screen flex-col gap-7 p-5">
       <Link
         href="/"
-        className="w-fit rounded-full p-2 transition-all hover:bg-black/5"
+        className="w-fit rounded-full p-2 transition-all hover:bg-muted"
       >
         <IoArrowBackOutline size={24} />
       </Link>
@@ -34,12 +34,13 @@ const History = () => {
             className="w-full rounded-md border text-sm"
             selected={dates}
             onDayClick={(date) => {
-              const i = data?.findIndex((workout) =>
-                isSameDate(workout.created!, date),
-              );
-              if (i !== -1) {
+              const arr: number[] = [];
+              data?.forEach((workout, i) => {
+                if (isSameDate(workout.created!, date)) arr.push(i);
+              });
+              if (arr.length >= 1) {
                 setOpen(true);
-                setClickedWorkoutIndex(i!);
+                setClickedWorkoutIndex(arr);
               }
             }}
             mode="multiple"
@@ -49,7 +50,7 @@ const History = () => {
       <WorkoutDialog
         open={open}
         setOpen={setOpen}
-        index={clickedWorkoutIndex}
+        indexes={clickedWorkoutIndex}
       />
     </div>
   );

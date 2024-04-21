@@ -72,9 +72,11 @@ export function EditDrawer({ setId, defaultValue, type }: IProps) {
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle>Weight</DrawerTitle>
+            <DrawerTitle>{type === "weight" ? "Weight" : "Reps"}</DrawerTitle>
             <DrawerDescription>
-              Set the amount of weight you lifted.
+              {type === "weight"
+                ? "Set the amount of weight you lifted"
+                : "Set the amount of reps you did"}
             </DrawerDescription>
           </DrawerHeader>
           <div className="p-4 pb-0">
@@ -82,6 +84,7 @@ export function EditDrawer({ setId, defaultValue, type }: IProps) {
               <Button
                 variant="outline"
                 size="icon"
+                disabled={count <= 0}
                 className="h-8 w-8 shrink-0 rounded-full"
                 onClick={() => {
                   onClick(-1);
@@ -97,7 +100,7 @@ export function EditDrawer({ setId, defaultValue, type }: IProps) {
                   {count}
                 </div>
                 <div className="text-[0.70rem] uppercase text-muted-foreground">
-                  kilograms
+                  {type === "weight" ? "kilograms" : "reps"}
                 </div>
               </div>
               <Button

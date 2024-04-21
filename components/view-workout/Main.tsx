@@ -19,7 +19,7 @@ const ViewWorkout = () => {
     <div className="flex min-h-screen flex-col gap-7 p-5 ">
       <Link
         href="/"
-        className="w-fit rounded-full p-2 transition-all hover:bg-black/5"
+        className="w-fit rounded-full p-2 transition-all hover:bg-muted"
       >
         <IoArrowBackOutline size={24} />
       </Link>

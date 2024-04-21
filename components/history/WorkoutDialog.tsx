@@ -17,40 +17,46 @@ import StarRating from "../StarRating";
 interface IProps {
   open: boolean;
   setOpen: (value: boolean) => void;
-  index: number;
+  indexes: number[];
 }
 
-const WorkoutDialog = ({ open, setOpen, index }: IProps) => {
+const WorkoutDialog = ({ open, setOpen, indexes }: IProps) => {
   const { data } = useGetAllPreviousWorkouts();
-  if (index < 0) return;
+  if (indexes.length <= 0) return;
+  console.log(indexes);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {getWeekDay(data![index].created?.getDay()!)}{" "}
-            {data![index].created!.getMonth() + 1}/
-            {data![index].created!.getDate()} 🏋️‍♂️
-          </DialogTitle>
+        {indexes.map((i) => (
+          <>
+            <DialogHeader>
+              <DialogTitle>
+                {getWeekDay(data![i].created?.getDay()!)} {data![i].type}{" "}
+                {data![i].created!.getMonth() + 1}/{data![i].created!.getDate()}{" "}
+                🏋️‍♂️
+              </DialogTitle>
 
-          <DialogDescription>
-            <div>Type: {data![index].type}</div>
-            <div>Duration: {durationAsString(data![index].duration!)}</div>
-            <div className="flex items-center justify-center gap-1 sm:justify-start">
-              Rating: <StarRating rating={data![index].rating!} size={16} />
-            </div>
-            {data![index].description && (
-              <div className="mt-2 font-light italic">
-                {data![index].description}
-              </div>
-            )}
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Link href={`/workout/${data![index].id}`}>
-            <Button>View</Button>
-          </Link>
-        </DialogFooter>
+              <DialogDescription>
+                <div>Time: {data![i].created?.toLocaleTimeString()}</div>
+                <div>Type: {data![i].type}</div>
+                <div>Duration: {durationAsString(data![i].duration!)}</div>
+                <div className="flex items-center justify-center gap-1 sm:justify-start">
+                  Rating: <StarRating rating={data![i].rating!} size={16} />
+                </div>
+                {data![i].description && (
+                  <div className="mt-2 font-light italic">
+                    {data![i].description}
+                  </div>
+                )}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Link href={`/workout/${data![i].id}`}>
+                <Button>View</Button>
+              </Link>
+            </DialogFooter>
+          </>
+        ))}
       </DialogContent>
     </Dialog>
   );
